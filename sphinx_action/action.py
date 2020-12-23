@@ -50,14 +50,14 @@ def extract_line_information(line_information):
 
 def parse_sphinx_warnings_log(logs):
     """Parses a sphinx file containing warnings and errors into a list of
-    status_check.CheckAnnotation objects.
+        status_check.CheckAnnotation objects.
 
-    Inputs look like this:
-/media/sf_shared/workspace/sphinx-action/tests/test_projects/warnings_and_errors/index.rst:19: WARNING: Error in "code-block" directive:
-maximum 1 argument(s) allowed, 2 supplied.
+        Inputs look like this:
+    /media/sf_shared/workspace/sphinx-action/tests/test_projects/warnings_and_errors/index.rst:19: WARNING: Error in "code-block" directive:
+    maximum 1 argument(s) allowed, 2 supplied.
 
-/cpython/Doc/distutils/_setuptools_disclaimer.rst: WARNING: document isn't included in any toctree
-/cpython/Doc/contents.rst:5: WARNING: toctree contains reference to nonexisting document 'ayylmao'
+    /cpython/Doc/distutils/_setuptools_disclaimer.rst: WARNING: document isn't included in any toctree
+    /cpython/Doc/contents.rst:5: WARNING: toctree contains reference to nonexisting document 'ayylmao'
     """
     annotations = []
 
