@@ -1,4 +1,4 @@
-name: 'Sphinx Build'
+name: 'Sphinx Build (composite)'
 description: 'Builds documentation using Sphinx'
 author: 'Ammar Askar'
 branding:
@@ -22,5 +22,8 @@ inputs:
       "apt-get update -y && apt-get install -y perl"
     required: false
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "composite"
+  steps:
+    - name: Build sphinx documentation
+      run: python ${{ github.action_path }}/entrypoint.py
+      shell: bash

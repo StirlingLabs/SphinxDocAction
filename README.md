@@ -1,20 +1,20 @@
-# Sphinx Build Action
+# Sphinx Build Action (composite action)
 
 [![Build Status](https://travis-ci.org/ammaraskar/sphinx-action.svg?branch=master)](https://travis-ci.org/ammaraskar/sphinx-action)
 [![Test Coverage](https://codecov.io/gh/ammaraskar/sphinx-action/branch/master/graph/badge.svg)](https://codecov.io/gh/ammaraskar/sphinx-action)
 
-
-This is a Github action that looks for Sphinx documentation folders in your
+This is the [composite variant](https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-composite-run-steps-action) of [ammaraskar/sphinx-action](ammaraskar/sphinx-action). This is a Github action that looks for Sphinx documentation folders in your
 project. It builds the documentation using Sphinx and any errors in the build
-process are bubbled up as Github status checks.
+process are bubbled up as Github status checks. This [composite variant](https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-composite-run-steps-action) allows you to combine the sphinx-build/linting action with more complex build workflows. Since the use of the `uses` keyword is not yet available for composite actions (see [actions/runner/issues/646](https://github.com/actions/runner/issues/646)) this action does not install python or any other dependencies. Therefore, you have to make sure all the dependencies ([python](https://www.python.org/), [Sphinx](https://www.sphinx-doc.org/en/master/) and your package) are correctly set up in previous steps.
 
 The main purposes of this action are:
 
-* Run a CI test to ensure your documentation still builds. 
+* Run a CI test to ensure your documentation still builds.
 
 * Allow contributors to get build errors on simple doc changes inline on Github
   without having to install Sphinx and build locally.
-  
+
+
 ![Example Screenshot](https://i.imgur.com/Gk2W32O.png)
 
 ## How to use
@@ -23,7 +23,7 @@ Create a workflow for the action, for example:
 
 ```yaml
 name: "Pull Request Docs Check"
-on: 
+on:
 - pull_request
 
 jobs:
@@ -31,12 +31,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: ammaraskar/sphinx-action@master
+    - name: Set up Python environment
+      uses: actions/setup-python@v2
       with:
-        docs-folder: "docs/"
+        python-version: 3.7
+    - name: Update pip
+      run: |
+        python -m pip install --upgrade pip
+    - name: Install the package your documenting together with its dependencies.
+      run: |
+        pip install .
+    - name: Build the sphinx documentation and posts warnings as github comments.
+      uses: rickstaa/sphinx-action@master
+      with:
+        docs-folder: "./docs"
 ```
 
-* If you have any Python dependencies that your project needs (themes, 
+* If you have any Python dependencies that your project needs (themes,
 build tools, etc) then place them in a requirements.txt file inside your docs
 folder.
 
@@ -112,7 +123,6 @@ build, you can use the `pre-build-command` argument like so:
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs2/"
-        pre-build-command: "apt-get update -y && apt-get install -y latexmk texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended"
         build-command: "make latexpdf"
 ```
 
