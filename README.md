@@ -5,7 +5,7 @@
 
 This is the [composite variant](https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-composite-run-steps-action) of [ammaraskar/sphinx-action](ammaraskar/sphinx-action). This is a Github action that looks for Sphinx documentation folders in your
 project. It builds the documentation using Sphinx and any errors in the build
-process are bubbled up as Github status checks. This [composite variant](https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-composite-run-steps-action) allows you to combine the sphinx-build/linting action with more complex build workflows. Since the use of the `uses` keyword is not yet available for composite actions (see [actions/runner/issues/646](https://github.com/actions/runner/issues/646)) this action does not install python or any other dependencies. Therefore, you have to make sure all the dependencies ([python](https://www.python.org/), [Sphinx](https://www.sphinx-doc.org/en/master/) and your package) are correctly set up in previous steps.
+process are bubbled up as Github status checks. This [composite variant](https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-composite-run-steps-action) allows you to combine the sphinx-build/linting action with more complex build workflows.
 
 The main purposes of this action are:
 
@@ -13,7 +13,6 @@ The main purposes of this action are:
 
 * Allow contributors to get build errors on simple doc changes inline on Github
   without having to install Sphinx and build locally.
-
 
 ![Example Screenshot](https://i.imgur.com/Gk2W32O.png)
 
@@ -47,12 +46,10 @@ jobs:
         docs-folder: "./docs"
 ```
 
-* If you have any Python dependencies that your project needs (themes,
-build tools, etc) then place them in a requirements.txt file inside your docs
-folder.
+* :warning: If you have any Python dependencies that your project needs (themes,
+build tools, etc) please be sure you installed these in previous workflow steps. This needs to be done as the the `uses` keyword is not yet available for composite actions (see [actions/runner/issues/646](https://github.com/actions/runner/issues/646)).
 
-* If you have multiple sphinx documentation folders, please use multiple
-  `uses` blocks.
+* If you have multiple sphinx documentation folders, please use multiple `uses` blocks.
 
 For a full example repo using this action including advanced usage, take a look
 at https://github.com/ammaraskar/sphinx-action-test
@@ -117,14 +114,7 @@ example, to invoke sphinx-build directly you can use:
 ```
 
 If there's system level dependencies that need to be installed for your
-build, you can use the `pre-build-command` argument like so:
-
-```yaml
-    - uses: ammaraskar/sphinx-action@master
-      with:
-        docs-folder: "docs2/"
-        build-command: "make latexpdf"
-```
+build, you have to install them in the previous workflow steps.
 
 ## Running the tests
 
