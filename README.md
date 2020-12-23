@@ -47,7 +47,7 @@ jobs:
 ```
 
 * :warning: If you have any Python dependencies that your project needs (themes,
-build tools, etc) please be sure you installed these in previous workflow steps. This needs to be done as the the `uses` keyword is not yet available for composite actions (see [actions/runner/issues/646](https://github.com/actions/runner/issues/646)).
+build tools, etc) please be sure you installed these in previous workflow steps. This needs to be done as the the `uses` keyword is not yet available for composite actions (see [actions/runner/issues/646](https://github.com/actions/runner/issues/646)). :warning:
 
 * If you have multiple sphinx documentation folders, please use multiple `uses` blocks.
 

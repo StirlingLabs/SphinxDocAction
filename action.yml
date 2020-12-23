@@ -22,5 +22,5 @@ runs:
       run: python ${{ github.action_path }}/entrypoint.py
       shell: bash
       env:
-        INPUT_DOCS_FOLDER: ${{ inputs.docs-folder }}
-        INPUT_BUILD_COMMAND: ${{ inputs.build-command }}
+        INPUT_DOCS-FOLDER: ${{ inputs.docs-folder }}
+        INPUT_BUILD-COMMAND: ${{ inputs.build-command }}
