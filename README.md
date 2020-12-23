@@ -1,7 +1,7 @@
 # Sphinx Build Action (composite action)
 
-[![Build Status](https://travis-ci.org/ammaraskar/sphinx-action.svg?branch=master)](https://travis-ci.org/ammaraskar/sphinx-action)
-[![Test Coverage](https://codecov.io/gh/ammaraskar/sphinx-action/branch/master/graph/badge.svg)](https://codecov.io/gh/ammaraskar/sphinx-action)
+[![Build Status](https://travis-ci.com/rickstaa/sphinx-action-composite.svg?branch=master)](https://travis-ci.com/rickstaa/sphinx-action-composite)
+[![codecov](https://codecov.io/gh/rickstaa/sphinx-action-composite/branch/master/graph/badge.svg?token=ZCQFPNPWGK)](https://codecov.io/gh/rickstaa/sphinx-action-composite)
 
 This is the [composite variant](https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-composite-run-steps-action) of [ammaraskar/sphinx-action](ammaraskar/sphinx-action). This is a Github action that looks for Sphinx documentation folders in your
 project. It builds the documentation using Sphinx and any errors in the build
