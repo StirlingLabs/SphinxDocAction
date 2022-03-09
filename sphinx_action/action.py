@@ -120,11 +120,11 @@ def build_docs(build_command, docs_directory):
             cwd=docs_directory,
         )
     elif build_command_list[0] == "sphinx-multiversion":
-        print(" ".join("[sphinx-action] Running:", build_command_string))
-        print("[sphinx-action] (elif) Running: {}".format(build_command_list))
+        print(" ".join("[sphinx-action] Running:", build_command))
+        print("[SphinxDocAction] (elif) Running: {}".format(build_command))
 
         result = subprocess.run(
-            build_command_list, cwd=docs_directory
+            build_command, cwd=docs_directory
         )
         print(result.stdout)
     else:
