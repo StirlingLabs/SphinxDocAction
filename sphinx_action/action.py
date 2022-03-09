@@ -106,25 +106,33 @@ def build_docs(build_command, docs_directory):
     sphinx_options = '--keep-going --no-color -w "{}"'.format(log_file)
     # If we're using make, pass the options as part of the SPHINXOPTS
     # environment variable, otherwise pass them straight into the command.
-    build_command = shlex.split(build_command)
-    if build_command[0] == "make":
+    build_command_list = shlex.split(build_command)
+    if build_command_list[0] == "make":
         # Pass the -e option into `make`, this is specified to be
         #   Cause environment variables, including those with null values, to override macro assignments within makefiles.
         # which is exactly what we want.
-        build_command += ["-e"]
-        print("[sphinx-action] Running: {}".format(build_command))
+        build_command_list += ["-e"]
+        print("[sphinx-action] Running: {}".format(build_command_list))
 
         return_code = subprocess.call(
-            build_command,
+            build_command_list,
             env=dict(os.environ, SPHINXOPTS=sphinx_options),
             cwd=docs_directory,
         )
+    elif build_command_list[0] == "sphinx-multiversion":
+        print(" ".join("[sphinx-action] Running:", build_command_string))
+        print("[sphinx-action] (elif) Running: {}".format(build_command_list))
+
+        result = subprocess.run(
+            build_command_list, cwd=docs_directory
+        )
+        print(result.stdout)
     else:
-        build_command += shlex.split(sphinx_options)
-        print("[sphinx-action] Running: {}".format(build_command))
+        build_command_list += shlex.split(sphinx_options)
+        print("[SphinxDocAction] (else) Running: {}".format(build_command))
 
         return_code = subprocess.call(
-            build_command + shlex.split(sphinx_options), cwd=docs_directory
+            build_command_list + shlex.split(sphinx_options), cwd=docs_directory
         )
 
     with open(log_file, "r") as f:
