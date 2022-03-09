@@ -112,21 +112,28 @@ def build_docs(build_command, docs_directory):
         #   Cause environment variables, including those with null values, to override macro assignments within makefiles.
         # which is exactly what we want.
         build_command_list += ["-e"]
-        print("[sphinx-action] Running: {}".format(build_command_list))
+        print("[SphinxDocAction] (make) Running: {}".format(build_command_list))
 
         return_code = subprocess.call(
             build_command_list,
             env=dict(os.environ, SPHINXOPTS=sphinx_options),
             cwd=docs_directory,
         )
+        with open(log_file, "r") as f:
+            annotations = parse_sphinx_warnings_log(f.readlines())
     elif build_command_list[0] == "sphinx-multiversion":
-        print(" ".join("[sphinx-action] Running:", build_command))
-        print("[SphinxDocAction] (elif) Running: {}".format(build_command))
-
+        # Sphinx Multiversion is a wrapper around sphinx that allows us to produce multiple
+        # versions of the docs to maintain up-to-date documentation for previous releases.
+        print(" ".join(["[SphinxDocAction] Running:", build_command]))
+        print("[SphinxDocAction] (elif) Running: {}".format(build_command_list))
         result = subprocess.run(
-            build_command, cwd=docs_directory
+            build_command_list, cwd=docs_directory, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
-        print(result.stdout)
+        print("return code is: {}".format(result.returncode))
+        print("stdout:\n{}\n-----\n".format(result.stdout.decode("utf-8")))
+        print("stderr:\n{}\n-----\n".format(result.stderr.decode("utf-8")))
+        return_code = result.returncode
+        annotations = parse_sphinx_warnings_log(result.stdout.splitlines())
     else:
         build_command_list += shlex.split(sphinx_options)
         print("[SphinxDocAction] (else) Running: {}".format(build_command))
@@ -134,9 +141,8 @@ def build_docs(build_command, docs_directory):
         return_code = subprocess.call(
             build_command_list + shlex.split(sphinx_options), cwd=docs_directory
         )
-
-    with open(log_file, "r") as f:
-        annotations = parse_sphinx_warnings_log(f.readlines())
+        with open(log_file, "r") as f:
+            annotations = parse_sphinx_warnings_log(f.readlines())
 
     return return_code, annotations
 
@@ -162,7 +168,7 @@ def build_all_docs(github_env, docs_directories):
         for annotation in annotations:
             status_check.output_annotation(annotation)
 
-    status_message = "[sphinx-action] Build {} with {} warnings".format(
+    status_message = "[SphinxDocAction] Build {} with {} warnings".format(
         "succeeded" if build_success else "failed", warnings
     )
     print(status_message)
